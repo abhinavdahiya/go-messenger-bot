@@ -1,4 +1,4 @@
-package messengerapi
+package mbotapi
 
 type Response struct {
 	Object  string  `json:"object"`
@@ -12,13 +12,13 @@ type Entry struct {
 }
 
 type Callback struct {
-	Sender    User     `json:"sender"`
-	Recipient Page     `json:"recipient"`
-	Timestamp int64    `json:"timestamp"`
-	Optin     Optin    `json:"optin"`
-	Message   Message  `json:"message,omitempty"`
-	Postback  Postback `json:"postback,omitempty"`
-	Delivery  Delivery `json:"delivery,omitempty"`
+	Sender    User          `json:"sender"`
+	Recipient Page          `json:"recipient"`
+	Timestamp int64         `json:"timestamp"`
+	Optin     InputOptin    `json:"optin"`
+	Message   InputMessage  `json:"message,omitempty"`
+	Postback  InputPostback `json:"postback,omitempty"`
+	Delivery  InputDelivery `json:"delivery,omitempty"`
 }
 
 type User struct {
@@ -30,32 +30,32 @@ type Page struct {
 	ID int64 `json:"id"`
 }
 
-type Optin struct {
+type InputOptin struct {
 	Ref string `json:"ref"`
 }
 
-type Message struct {
-	MID         string       `json:"mid"`
-	Seq         int64        `json:"seq"`
-	Text        string       `json:"text"`
-	Attachments []Attachment `json:"attachments,omitempty"`
+type InputMessage struct {
+	MID         string            `json:"mid"`
+	Seq         int64             `json:"seq"`
+	Text        string            `json:"text"`
+	Attachments []InputAttachment `json:"attachments,omitempty"`
 }
 
-type Attachment struct {
-	Type    string        `json:"type"`
-	Payload AttachPayload `json:"payload"`
+type InputAttachment struct {
+	Type    string             `json:"type"`
+	Payload InputAttachPayload `json:"payload"`
 }
 
-type AttachPayload struct {
+type InputAttachPayload struct {
 	URL string `json:"url"`
 }
 
-type Delivery struct {
+type InputDelivery struct {
 	MIDs      []string `json:"mids"`
 	Watermark int64    `json:"watermark"`
 	Seq       int64    `json:"seq"`
 }
 
-type Postback struct {
+type InputPostback struct {
 	Payload string `json:"payload"`
 }
