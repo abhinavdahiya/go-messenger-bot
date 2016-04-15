@@ -154,12 +154,6 @@ func (bot *BotAPI) SetWebhook(pattern string) (<-chan Callback, *http.ServeMux) 
 
 	mux := http.NewServeMux()
 	mux.HandleFunc(pattern, func(w http.ResponseWriter, req *http.Request) {
-		if bot.Debug {
-			var r map[string]interface{}
-			decoder := json.NewDecoder(req.Body)
-			decoder.Decode(&r)
-			log.Printf("INFO Body: %#v", r)
-		}
 		switch req.Method {
 		case "GET":
 			if req.FormValue("hub.verify_token") == bot.VerifyToken {
