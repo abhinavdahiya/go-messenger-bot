@@ -112,7 +112,7 @@ type ReceiptTemplate struct {
 	Timestamp     int64             `json:"timestamp,omitempty"`
 	URL           string            `json:"order_url,omitempty"`
 	Items         []OrderItem       `json:"elements"`
-	Address       OrderAddress      `json:"address,omitempty"`
+	Address       *OrderAddress     `json:"address,omitempty"`
 	Summary       OrderSummary      `json:"summary"`
 	Adjustments   []OrderAdjustment `json:"adjustments.omitempty"`
 }
@@ -148,9 +148,9 @@ type OrderAdjustment struct {
 }
 
 type APIResponse struct {
-	RID   int64         `json:"recipient_id"`
-	MID   string        `json:"message_id"`
-	Error ErrorResponse `json:"error"`
+	RID   int64          `json:"recipient_id"`
+	MID   string         `json:"message_id"`
+	Error *ErrorResponse `json:"error"`
 }
 
 type ErrorResponse struct {
