@@ -15,6 +15,10 @@ const (
 	ErrBubblesLimitExceeded = errors.New("Max 10 bubbles allowed on GenericTemplate")
 )
 
+const (
+	APIEndpoint = "https://graph.facebook.com/v2.6/me/messages?access_token=%s"
+)
+
 type Request struct {
 	Recipient User    `json:"recipient"`
 	Message   Message `json:"message"`
@@ -133,4 +137,18 @@ type OrderSummary struct {
 type OrderAdjustment struct {
 	Name   string `json:"name"`
 	Amount int    `json:"amount"`
+}
+
+type APIResponse struct {
+	RID   int64         `json:"recipient_id"`
+	MID   string        `json:"message_id"`
+	Error ErrorResponse `json:"error"`
+}
+
+type ErrorResponse struct {
+	Message    string `json:"message"`
+	Type       string `json:"type"`
+	Code       int    `json:"code"`
+	ErrorData  string `json:"error_data"`
+	FBstraceID string `json:"fbstrace_id"`
 }
