@@ -26,8 +26,8 @@ type Request struct {
 }
 
 type Message struct {
-	Text       string     `json:"text,omitempty"`
-	Attachment Attachment `json:"attachment,omitempty"`
+	Text       string      `json:"text,omitempty"`
+	Attachment *Attachment `json:"attachment,omitempty"`
 }
 
 type Attachment struct {

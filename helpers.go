@@ -22,7 +22,7 @@ func NewMessage(text string) Message {
 
 func NewImageMesssage(url string) Message {
 	return Message{
-		Attachment: Attachment{
+		Attachment: &Attachment{
 			Type: "image",
 			Payload: ImagePayload{
 				URL: url,

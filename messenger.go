@@ -75,7 +75,7 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 			Recipient: u,
 			NotifType: n,
 			Message: Message{
-				Attachment: Attachment{
+				Attachment: &Attachment{
 					Type:    "template",
 					Payload: c.(GenericTemplate),
 				},
@@ -87,7 +87,7 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 			Recipient: u,
 			NotifType: n,
 			Message: Message{
-				Attachment: Attachment{
+				Attachment: &Attachment{
 					Type:    "template",
 					Payload: c.(ButtonTemplate),
 				},
@@ -99,7 +99,7 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 			Recipient: u,
 			NotifType: n,
 			Message: Message{
-				Attachment: Attachment{
+				Attachment: &Attachment{
 					Type:    "template",
 					Payload: c.(ReceiptTemplate),
 				},
