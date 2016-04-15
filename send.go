@@ -66,6 +66,10 @@ func (g GenericTemplate) Validate() error {
 	return nil
 }
 
+func (g *GenericTemplate) AddElement(e Element) {
+	g.Elements = append(g.Elements, e)
+}
+
 type Element struct {
 	Title    string   `json:"title"`
 	URL      string   `json:"item_url,omitempty"`
