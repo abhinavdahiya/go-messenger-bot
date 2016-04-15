@@ -70,8 +70,8 @@ func (g GenericTemplate) Validate() error {
 	return nil
 }
 
-func (g *GenericTemplate) AddElement(e Element) {
-	g.Elements = append(g.Elements, e)
+func (g *GenericTemplate) AddElement(e ...Element) {
+	g.Elements = append(g.Elements, e...)
 }
 
 type Element struct {
@@ -80,6 +80,10 @@ type Element struct {
 	ImageURL string   `json:"image_url,omitempty"`
 	Subtitle string   `json:"subtitle,omitempty"`
 	Buttons  []Button `json:"buttons,omitempty"`
+}
+
+func (e *Element) AddButton(b ...Button) {
+	e.Buttons = append(e.Buttons, b...)
 }
 
 type Button struct {
