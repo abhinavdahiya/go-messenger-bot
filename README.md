@@ -38,3 +38,9 @@ func main() {
 Facebook messenger webhook needs a certificate certified by known CA,
 Now that [Let's Encrypt](https://letsencrypt.org) has entered public beta,
 you may wish to generate your free TLS certificate there.
+
+## Inspiration
+
+Messenger takes design cues from:
+
+- [`go-telegram-bot-api/telegram-bot-api`](https://github.com/go-telegram-bot-api/telegram-bot-api)
