@@ -33,6 +33,7 @@ func (bot *BotAPI) MakeRequest(b *bytes.Buffer) (APIResponse, error) {
 	uri := fmt.Sprintf(APIEndpoint, bot.Token)
 
 	req, _ := http.NewRequest("POST", uri, b)
+	req.Header.Set("Content-Type", "application/json")
 	resp, err := bot.Client.Do(req)
 	if err != nil {
 		return APIResponse{}, err
