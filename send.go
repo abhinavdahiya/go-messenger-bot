@@ -148,9 +148,9 @@ type OrderAdjustment struct {
 }
 
 type APIResponse struct {
-	RID   int64          `json:"recipient_id"`
-	MID   string         `json:"message_id"`
-	Error *ErrorResponse `json:"error"`
+	RID   int64         `json:"recipient_id"`
+	MID   string        `json:"message_id"`
+	Error ErrorResponse `json:"error"`
 }
 
 type ErrorResponse struct {
