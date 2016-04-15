@@ -114,7 +114,7 @@ type ReceiptTemplate struct {
 	Items         []OrderItem       `json:"elements"`
 	Address       *OrderAddress     `json:"address,omitempty"`
 	Summary       OrderSummary      `json:"summary"`
-	Adjustments   []OrderAdjustment `json:"adjustments.omitempty"`
+	Adjustments   []OrderAdjustment `json:"adjustments,omitempty"`
 }
 
 type OrderItem struct {
