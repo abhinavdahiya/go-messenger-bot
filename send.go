@@ -99,6 +99,10 @@ type ButtonTemplate struct {
 	Buttons []Button `json:"buttons,omitempty"`
 }
 
+func (b *ButtonTemplate) AddButton(bt ...Button) {
+	b.Buttons = append(b.Buttons, bt...)
+}
+
 type ReceiptTemplate struct {
 	TemplateBase
 	RecipientName string            `json:"recipient_name"`
