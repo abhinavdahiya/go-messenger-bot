@@ -22,7 +22,7 @@ type Callback struct {
 }
 
 type User struct {
-	ID          string `json:"id,omitempty"`
+	ID          int64  `json:"id,omitempty"`
 	PhoneNumber string `json:"phone_number,omitempty"`
 }
 
