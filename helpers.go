@@ -2,7 +2,7 @@ package mbotapi
 
 import "github.com/satori/go.uuid"
 
-func NewUserFromID(id int64) User {
+func NewUserFromID(id string) User {
 	return User{
 		ID: id,
 	}
