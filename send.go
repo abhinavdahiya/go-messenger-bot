@@ -8,7 +8,7 @@ const (
 	NoNotif      = "NO_PUSH"
 )
 
-const (
+var (
 	ErrTitleTooLong         = errors.New("Template Title exceeds the 25 character limit")
 	ErrSubtitleTooLong      = errors.New("Template Subtitle exceeds the 80 character limit")
 	ErrButtonsLimitExceeded = errors.New("Max 3 buttons allowed on GenericTemplate")
@@ -86,7 +86,7 @@ type Button struct {
 	Type    string `json:"type"`
 	Title   string `json:"title,omitempty"`
 	URL     string `json:"url,omitempty"`
-	Payload sting  `json:"payload,omitempty"`
+	Payload string `json:"payload,omitempty"`
 }
 
 type ButtonTemplate struct {

@@ -10,7 +10,7 @@ func NewUserFromID(id int64) User {
 
 func NewUserFromPhone(p string) User {
 	return User{
-		PhoneNo: p,
+		PhoneNumber: p,
 	}
 }
 
@@ -33,22 +33,28 @@ func NewImageMesssage(url string) Message {
 
 func NewGenericTemplate() GenericTemplate {
 	return GenericTemplate{
-		Type:     "generic",
+		TemplateBase: TemplateBase{
+			Type: "generic",
+		},
 		Elements: []Element{},
 	}
 }
 
-func NewButtonTemplate(title string) ButtonTemplate {
+func NewButtonTemplate(text string) ButtonTemplate {
 	return ButtonTemplate{
-		Type:    "button",
-		Title:   title,
+		TemplateBase: TemplateBase{
+			Type: "button",
+		},
+		Text:    text,
 		Buttons: []Button{},
 	}
 }
 
 func NewReceiptTemplate(rname string) ReceiptTemplate {
 	return ReceiptTemplate{
-		Type:          "receipt",
+		TemplateBase: TemplateBase{
+			Type: "receipt",
+		},
 		RecipientName: rname,
 		ID:            uuid.NewV4().String(),
 		Currency:      "USD",

@@ -31,7 +31,7 @@ func NewBotAPI(token string, vtoken string) *BotAPI {
 func (bot *BotAPI) MakeRequest(b *bytes.Buffer) (APIResponse, error) {
 	uri := fmt.Sprintf(APIEndpoint, bot.Token)
 
-	req := http.NewRequest("POST", uri, b)
+	req, _ := http.NewRequest("POST", uri, b)
 	resp, err := bot.Client.Do(req)
 	if err != nil {
 		return APIResponse{}, err
@@ -40,7 +40,7 @@ func (bot *BotAPI) MakeRequest(b *bytes.Buffer) (APIResponse, error) {
 
 	var rsp APIResponse
 	dec := json.NewDecoder(resp.Body)
-	err := dec.Decode(&rsp)
+	err = dec.Decode(&rsp)
 	if err != nil {
 		return APIResponse{}, nil
 	}
@@ -64,14 +64,14 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 		return APIResponse{}, errors.New("Use MakeRequest to send Request!!")
 	case Message:
 		r = Request{
-			User:      u,
+			Recipient: u,
 			Message:   c.(Message),
 			NotifType: n,
 		}
 
 	case GenericTemplate:
 		r = Request{
-			User:      u,
+			Recipient: u,
 			NotifType: n,
 			Message: Message{
 				Attachment: Attachment{
@@ -83,7 +83,7 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 
 	case ButtonTemplate:
 		r = Request{
-			User:      u,
+			Recipient: u,
 			NotifType: n,
 			Message: Message{
 				Attachment: Attachment{
@@ -95,7 +95,7 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 
 	case ReceiptTemplate:
 		r = Request{
-			User:      u,
+			Recipient: u,
 			NotifType: n,
 			Message: Message{
 				Attachment: Attachment{
