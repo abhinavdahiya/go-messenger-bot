@@ -138,7 +138,7 @@ func (bot *BotAPI) SendFile(u User, path string) (APIResponse, error) {
 
 	usr, _ := json.Marshal(u)
 	_ = writer.WriteField("recipient", string(usr))
-	img := NewImageMesssage("")
+	img := NewImageMessage("")
 	im, _ := json.Marshal(img)
 	_ = writer.WriteField("message", string(im))
 
