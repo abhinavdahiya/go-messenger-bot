@@ -20,9 +20,9 @@ const (
 )
 
 type Request struct {
-	Recipient User    `json:"recipient"`
-	Message   Message `json:"message"`
-	NotifType string  `json:"notification_type"`
+	Recipient *User    `json:"recipient"`
+	Message   *Message `json:"message"`
+	NotifType string   `json:"notification_type"`
 }
 
 type Message struct {
@@ -31,8 +31,8 @@ type Message struct {
 }
 
 type Attachment struct {
-	Type    string            `json:"type"`
-	Payload AttachmentPayload `json:"payload"`
+	Type    string             `json:"type"`
+	Payload *AttachmentPayload `json:"payload"`
 }
 
 type AttachmentPayload interface{}
@@ -113,7 +113,7 @@ type ReceiptTemplate struct {
 	URL           string            `json:"order_url,omitempty"`
 	Items         []OrderItem       `json:"elements"`
 	Address       *OrderAddress     `json:"address,omitempty"`
-	Summary       OrderSummary      `json:"summary"`
+	Summary       *OrderSummary     `json:"summary"`
 	Adjustments   []OrderAdjustment `json:"adjustments.omitempty"`
 }
 
