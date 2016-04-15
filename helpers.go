@@ -20,7 +20,7 @@ func NewMessage(text string) Message {
 	}
 }
 
-func NewImageMesssage(url string) Message {
+func NewImageMessage(url string) Message {
 	return Message{
 		Attachment: &Attachment{
 			Type: "image",
