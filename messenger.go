@@ -13,6 +13,8 @@ import (
 	"path/filepath"
 )
 
+// This defines a bot
+// Set Debug to true for debugging
 type BotAPI struct {
 	Token       string
 	VerifyToken string
@@ -20,6 +22,8 @@ type BotAPI struct {
 	Client      *http.Client
 }
 
+// This helps create a BotAPI instance with token, verify_token
+// By default Debug is set to false
 func NewBotAPI(token string, vtoken string) *BotAPI {
 	return &BotAPI{
 		Token:       token,
@@ -29,6 +33,10 @@ func NewBotAPI(token string, vtoken string) *BotAPI {
 	}
 }
 
+// This helps send request (send messages to users)
+// It takes Request struct encoded into a buffer of json bytes
+// The APIResponse contains the error from FB if any
+// Should NOT be directly used, Use Send / SendFile
 func (bot *BotAPI) MakeRequest(b *bytes.Buffer) (APIResponse, error) {
 	uri := fmt.Sprintf(APIEndpoint, bot.Token)
 
@@ -53,6 +61,9 @@ func (bot *BotAPI) MakeRequest(b *bytes.Buffer) (APIResponse, error) {
 	return rsp, nil
 }
 
+// This function helps send messages to users
+// It takes Message / GenericTemplate / ButtonTemplate / ReceiptTemplate and
+// sends it to the user
 func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error) {
 	var r Request
 
@@ -121,6 +132,8 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 	return bot.MakeRequest(bytes.NewBuffer(payl))
 }
 
+// This helps to send local images (currently) to users
+// TODO: not tested yet!
 func (bot *BotAPI) SendFile(u User, path string) (APIResponse, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -150,6 +163,12 @@ func (bot *BotAPI) SendFile(u User, path string) (APIResponse, error) {
 	return bot.MakeRequest(body)
 }
 
+// This function registers the handlers for
+// - webhook verification
+// - all callbacks made on the webhhoks
+// It loops over all entries in the callback and
+// pushes to the Callback channel
+// This also return a *http.ServeMux which can be used to listenAndServe
 func (bot *BotAPI) SetWebhook(pattern string) (<-chan Callback, *http.ServeMux) {
 	callbackChan := make(chan Callback, 100)
 

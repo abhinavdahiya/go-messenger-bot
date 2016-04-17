@@ -1,16 +1,29 @@
 package mbotapi
 
+// Payload received by the webhook
+// The Object field is always set to `page`
+// Contains bacthed entries
 type Response struct {
 	Object  string  `json:"object"`
 	Entries []Entry `json:"entry"`
 }
 
+// This defines an Entry in the payload by webhook
 type Entry struct {
 	PageID    int64      `json:"id"`
 	Time      int64      `json:"time"`
 	Messaging []Callback `json:"messaging"`
 }
 
+// This represents the content of the message sent by
+// the user
+// Various kinds of callbacks from user are -
+// OptinCallback
+// MessageCallback
+// PostbackCallback
+// DeliveryCallback
+//
+//TODO: Create a way to identify the type of callback
 type Callback struct {
 	Sender    User          `json:"sender"`
 	Recipient Page          `json:"recipient"`
@@ -21,6 +34,8 @@ type Callback struct {
 	Delivery  InputDelivery `json:"delivery,omitempty"`
 }
 
+// This defines an user
+// One of the fields will be set to identify the user
 type User struct {
 	ID          int64  `json:"id,omitempty"`
 	PhoneNumber string `json:"phone_number,omitempty"`
@@ -30,10 +45,14 @@ type Page struct {
 	ID int64 `json:"id"`
 }
 
+// Ref contains the `data-ref` set for message optin for the bot
 type InputOptin struct {
 	Ref string `json:"ref"`
 }
 
+// This represents a Message from user
+// If text message only Text field exists
+// If media message Attachments fields contains an array of attachmensts sent
 type InputMessage struct {
 	MID         string            `json:"mid"`
 	Seq         int64             `json:"seq"`
@@ -41,6 +60,8 @@ type InputMessage struct {
 	Attachments []InputAttachment `json:"attachments,omitempty"`
 }
 
+// Represents an attachement
+// The types are image/audio/video
 type InputAttachment struct {
 	Type    string             `json:"type"`
 	Payload InputAttachPayload `json:"payload"`
@@ -50,12 +71,15 @@ type InputAttachPayload struct {
 	URL string `json:"url"`
 }
 
+// This contains delivery reports for batch
+// of messages(mids)
 type InputDelivery struct {
 	MIDs      []string `json:"mids"`
 	Watermark int64    `json:"watermark"`
 	Seq       int64    `json:"seq"`
 }
 
+// Represents a postback sent by clicking on Postback Button
 type InputPostback struct {
 	Payload string `json:"payload"`
 }
