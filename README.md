@@ -18,10 +18,7 @@ import (
 )
 
 func main() {
-	bot, err := mbotapi.NewBotAPI("ACCESS_TOKEN", "VERIFY_TOKEN")
-	if err != nil {
-		log.Panic(err)
-	}
+	bot := mbotapi.NewBotAPI("ACCESS_TOKEN", "VERIFY_TOKEN")
 
 	callbacks, mux := bot.SetWebhook("/webhook")
 	go http.ListenAndServeTLS("0.0.0.0:8443", "cert.pem", "key.pem", mux)
