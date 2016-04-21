@@ -34,6 +34,22 @@ type Callback struct {
 	Delivery  InputDelivery `json:"delivery,omitempty"`
 }
 
+func (c Callback) IsMessage() bool {
+	return !(c.Message.Text == "" && len(c.Message.Attachments) == 0)
+}
+
+func (c Callback) IsOptin() bool {
+	return !(c.Optin == (InputOptin{}))
+}
+
+func (c Callback) IsPostback() bool {
+	return !(c.Postback == (InputPostback{}))
+}
+
+func (c Callback) IsDelivery() bool {
+	return !(len(c.Delivery.MIDs) == 0)
+}
+
 // This defines an user
 // One of the fields will be set to identify the user
 type User struct {
