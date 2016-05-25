@@ -190,6 +190,7 @@ func (bot *BotAPI) SetWebhook(pattern string) (<-chan Callback, *http.ServeMux) 
 			var rsp Response
 			if bot.Debug {
 				body, _ := ioutil.ReadAll(req.Body)
+				req.Body = ioutil.NopCloser(bytes.NewReader(body))
 				log.Printf("[INFO]%s", body)
 			}
 			decoder := json.NewDecoder(req.Body)
