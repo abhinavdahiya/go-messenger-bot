@@ -53,12 +53,12 @@ func (c Callback) IsDelivery() bool {
 // This defines an user
 // One of the fields will be set to identify the user
 type User struct {
-	ID          int64  `json:"id,omitempty"`
+	ID          int64  `json:"id,omitempty,string"`
 	PhoneNumber string `json:"phone_number,omitempty"`
 }
 
 type Page struct {
-	ID int64 `json:"id"`
+	ID int64 `json:"id,string"`
 }
 
 // Ref contains the `data-ref` set for message optin for the bot
