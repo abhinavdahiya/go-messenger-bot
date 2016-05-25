@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"net/http"
@@ -187,6 +188,10 @@ func (bot *BotAPI) SetWebhook(pattern string) (<-chan Callback, *http.ServeMux) 
 			defer req.Body.Close()
 
 			var rsp Response
+			if bot.Debug {
+				body, _ := ioutil.ReadAll(response.Body)
+				log.Printf("[INFO]%s", body)
+			}
 			decoder := json.NewDecoder(req.Body)
 			decoder.Decode(&rsp)
 
