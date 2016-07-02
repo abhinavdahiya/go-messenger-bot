@@ -74,17 +74,25 @@ type InputMessage struct {
 	Seq         int64             `json:"seq"`
 	Text        string            `json:"text"`
 	Attachments []InputAttachment `json:"attachments,omitempty"`
+	QuickReply  InputQRPayload    `json:"quick_reply,omitempty"`
+}
+
+//Represents a quick reply payload
+type InputQRPayload struct {
+	Payload string `json:"payload"`
 }
 
 // Represents an attachement
-// The types are image/audio/video
+// The types are image/audio/video/location
 type InputAttachment struct {
 	Type    string             `json:"type"`
 	Payload InputAttachPayload `json:"payload"`
 }
 
 type InputAttachPayload struct {
-	URL string `json:"url"`
+	URL  string  `json:"url,omitempty"`
+	Lat  float64 `json:"coordinates.lat,omitempty"`
+	Long float64 `json:"coordinates.long,omitempty"`
 }
 
 // This contains delivery reports for batch
