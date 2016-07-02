@@ -131,9 +131,9 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 		return APIResponse{}, errors.New("Type is not supported")
 	}
 
-	if r == (Request{}) {
-		return APIResponse{}, errors.New("Unknown Error")
-	}
+	//if r == (Request{}) {
+	//	return APIResponse{}, errors.New("Unknown Error")
+	//}
 	payl, _ := json.Marshal(r)
 	if bot.Debug {
 		log.Printf("[INFO] Payload: %s", string(payl))
@@ -160,7 +160,7 @@ func (bot *BotAPI) SendFile(u User, path string) (APIResponse, error) {
 
 	usr, _ := json.Marshal(u)
 	_ = writer.WriteField("recipient", string(usr))
-	img := NewImageMessage("")
+	img := NewImageFromURL("")
 	im, _ := json.Marshal(img)
 	_ = writer.WriteField("message", string(im))
 

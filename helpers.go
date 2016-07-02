@@ -18,7 +18,7 @@ func NewUserFromPhone(p string) User {
 
 //Create a sender action
 // takes const TypingON/TypingOFF/MarkSeen
-func NewAction(ac string) Action {
+func NewAction(ac Action) Action {
 	return ac
 }
 

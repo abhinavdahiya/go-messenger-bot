@@ -72,7 +72,7 @@ func (bot *BotAPI) SetGStarted(text string) error {
 	g := ThreadSetting{
 		Type:  "call_to_actions",
 		State: "new_thread",
-		GStarted: []Gstarted{
+		GStarted: []GStarted{
 			{text},
 		},
 	}
