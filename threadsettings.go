@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -14,11 +15,10 @@ const (
 )
 
 type ThreadSetting struct {
-	Type     string     `json:"setting_type"`
-	State    string     `json:"thread_statei,omitempty"`
-	GStarted []GStarted `json:"call_to_action,omitempty"`
-	Menu     []Button   `json:"call_to_action,omitempty"`
-	Greeting Greeting   `json:"greeting,omitempty"`
+	Type     string      `json:"setting_type"`
+	State    string      `json:"thread_state,omitempty"`
+	Action   interface{} `json:"call_to_actions,omitempty"`
+	Greeting *Greeting   `json:"greeting,omitempty"`
 }
 
 type Greeting struct {
@@ -40,16 +40,8 @@ func (bot *BotAPI) SetSettings(b *bytes.Buffer) error {
 	}
 	defer resp.Body.Close()
 
-	var rsp struct {
-		Result string `json:"result"`
-	}
-	dec := json.NewDecoder(resp.Body)
-	err = dec.Decode(&rsp)
-	if err != nil {
-		return err
-	}
-
-	log.Printf("[SETTINGS] %#v", rsp)
+	rsp, _ := ioutil.ReadAll(resp.Body)
+	log.Printf("[SETTINGS] %s", rsp)
 	if resp.StatusCode != 200 {
 		return errors.New(http.StatusText(resp.StatusCode))
 	}
@@ -59,12 +51,17 @@ func (bot *BotAPI) SetSettings(b *bytes.Buffer) error {
 func (bot *BotAPI) SetGreeting(text string) error {
 	g := ThreadSetting{
 		Type: "greeting",
-		Greeting: Greeting{
+		Greeting: &Greeting{
 			Text: text,
 		},
 	}
 
-	payl, _ := json.Marshal(g)
+	log.Printf("[SETTINGS] %#v", g)
+	payl, err := json.Marshal(g)
+	if err != nil {
+		return err
+	}
+	log.Printf("[SETTINGS] %s", payl)
 	return bot.SetSettings(bytes.NewBuffer(payl))
 }
 
@@ -72,22 +69,32 @@ func (bot *BotAPI) SetGStarted(text string) error {
 	g := ThreadSetting{
 		Type:  "call_to_actions",
 		State: "new_thread",
-		GStarted: []GStarted{
+		Action: []GStarted{
 			{text},
 		},
 	}
 
-	payl, _ := json.Marshal(g)
+	log.Printf("[SETTINGS] %#v", g)
+	payl, err := json.Marshal(g)
+	if err != nil {
+		return err
+	}
+	log.Printf("[SETTINGS] %s", payl)
 	return bot.SetSettings(bytes.NewBuffer(payl))
 }
 
 func (bot *BotAPI) SetMenu(bts []Button) error {
 	g := ThreadSetting{
-		Type:  "call_to_actions",
-		State: "existing_thread",
-		Menu:  bts,
+		Type:   "call_to_actions",
+		State:  "existing_thread",
+		Action: bts,
 	}
 
-	payl, _ := json.Marshal(g)
+	log.Printf("[SETTINGS] %#v", g)
+	payl, err := json.Marshal(g)
+	if err != nil {
+		return err
+	}
+	log.Printf("[SETTINGS] %s", payl)
 	return bot.SetSettings(bytes.NewBuffer(payl))
 }

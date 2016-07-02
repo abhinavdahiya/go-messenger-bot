@@ -2,6 +2,8 @@ package mbotapi
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha1"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -19,15 +21,17 @@ import (
 type BotAPI struct {
 	Token       string
 	VerifyToken string
+	AppSecret   string
 	Debug       bool
 	Client      *http.Client
 }
 
 // This helps create a BotAPI instance with token, verify_token
 // By default Debug is set to false
-func NewBotAPI(token string, vtoken string) *BotAPI {
+func NewBotAPI(token string, vtoken string, secret string) *BotAPI {
 	return &BotAPI{
 		Token:       token,
+		AppSecret:   secret,
 		VerifyToken: vtoken,
 		Debug:       false,
 		Client:      &http.Client{},
@@ -172,6 +176,16 @@ func (bot *BotAPI) SendFile(u User, path string) (APIResponse, error) {
 	return bot.MakeRequest(body)
 }
 
+//This function verifies the message
+func verifySignature(appSecret string, bytes []byte, expectedSignature string) bool {
+	mac := hmac.New(sha1.New, []byte(appSecret))
+	mac.Write(bytes)
+	if fmt.Sprintf("%x", mac.Sum(nil)) != expectedSignature {
+		return false
+	}
+	return true
+}
+
 // This function registers the handlers for
 // - webhook verification
 // - all callbacks made on the webhhoks
@@ -195,12 +209,17 @@ func (bot *BotAPI) SetWebhook(pattern string) (<-chan Callback, *http.ServeMux) 
 		case "POST":
 			defer req.Body.Close()
 
-			var rsp Response
+			body, _ := ioutil.ReadAll(req.Body)
+			req.Body = ioutil.NopCloser(bytes.NewReader(body))
 			if bot.Debug {
-				body, _ := ioutil.ReadAll(req.Body)
-				req.Body = ioutil.NopCloser(bytes.NewReader(body))
 				log.Printf("[INFO]%s", body)
 			}
+
+			if req.Header.Get("X-Hub-Signature") == "" || !verifySignature(bot.AppSecret, body, req.Header.Get("X-Hub-Signature")[5:]) {
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+			var rsp Response
 			decoder := json.NewDecoder(req.Body)
 			decoder.Decode(&rsp)
 
