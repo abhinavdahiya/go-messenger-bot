@@ -76,6 +76,14 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 	switch c.(type) {
 	case Request:
 		return APIResponse{}, errors.New("Use MakeRequest to send Request!!")
+
+	case Action:
+		r = Request{
+			Recipient: u,
+			Action:    c.(Action),
+			NotifType: n,
+		}
+
 	case Message:
 		r = Request{
 			Recipient: u,

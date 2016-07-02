@@ -6,6 +6,9 @@ const (
 	RegularNotif = "REGULAR"
 	SilentNotif  = "SILENT_PUSH"
 	NoNotif      = "NO_PUSH"
+	TypingON     = "typing_on"
+	TypingOFF    = "typing_off"
+	MarkSeen     = "mark_seen"
 )
 
 var (
@@ -21,13 +24,27 @@ const (
 
 type Request struct {
 	Recipient User    `json:"recipient"`
-	Message   Message `json:"message"`
+	Message   Message `json:"message,omitempty"`
+	Action    Action  `json:"sender_action,omitempty"`
 	NotifType string  `json:"notification_type"`
 }
+
+type Action string
 
 type Message struct {
 	Text       string      `json:"text,omitempty"`
 	Attachment *Attachment `json:"attachment,omitempty"`
+	QuickReply []QR        `json:"quick_reply,omitempty"`
+}
+
+func (m *Message) AddQR(q ...QR) {
+	m.QuickReply = append(m.QuickReply, q...)
+}
+
+type QR struct {
+	Type    string `json:"content_type"`
+	Title   string `json:"title"`
+	Payload string `json:"payload"`
 }
 
 type Attachment struct {
@@ -37,7 +54,8 @@ type Attachment struct {
 
 type AttachmentPayload interface{}
 
-type ImagePayload struct {
+// Used as payload for type image/audio/video/file
+type FilePayload struct {
 	URL string `json:"url"`
 }
 
@@ -45,6 +63,7 @@ type TemplateBase struct {
 	Type string `json:"template_type"`
 }
 
+//Used as payload for type template(generic)
 type GenericTemplate struct {
 	TemplateBase
 	Elements []Element `json:"elements"`
@@ -93,6 +112,7 @@ type Button struct {
 	Payload string `json:"payload,omitempty"`
 }
 
+//Used as payload for type template(button)
 type ButtonTemplate struct {
 	TemplateBase
 	Text    string   `json:"text,omitempty"`
@@ -103,6 +123,7 @@ func (b *ButtonTemplate) AddButton(bt ...Button) {
 	b.Buttons = append(b.Buttons, bt...)
 }
 
+//Used as payload for type template(receipt)
 type ReceiptTemplate struct {
 	TemplateBase
 	RecipientName string            `json:"recipient_name"`

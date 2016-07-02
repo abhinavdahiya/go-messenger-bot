@@ -90,9 +90,13 @@ type InputAttachment struct {
 }
 
 type InputAttachPayload struct {
-	URL  string  `json:"url,omitempty"`
-	Lat  float64 `json:"coordinates.lat,omitempty"`
-	Long float64 `json:"coordinates.long,omitempty"`
+	URL    string      `json:"url,omitempty"`
+	Coords InputCoords `json:"coordinates,omitempty"`
+}
+
+type InputCoords struct {
+	Lat  float64 `json:"lat"`
+	Long float64 `json:"long"`
 }
 
 // This contains delivery reports for batch

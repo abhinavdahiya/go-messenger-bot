@@ -16,6 +16,12 @@ func NewUserFromPhone(p string) User {
 	}
 }
 
+//Create a sender action
+// takes const TypingON/TypingOFF/MarkSeen
+func NewAction(ac string) Action {
+	return ac
+}
+
 // Creates a Message with given text to be sent by bot
 func NewMessage(text string) Message {
 	return Message{
@@ -23,15 +29,64 @@ func NewMessage(text string) Message {
 	}
 }
 
+//Creates a quick reply
+//Takes two parameters:
+// - title(string)
+// - postback_payload(string)
+func NewQuickReply(title string, pst string) QR {
+	return QR{
+		Title:   title,
+		Payload: pst,
+		Type:    "text",
+	}
+}
+
 // Creates a Message with image attachment to be
 // sent by bot
-// Currently supports url string only
-// TODO: local file needs to be implmented
-func NewImageMessage(url string) Message {
+func NewImageFromURL(url string) Message {
 	return Message{
 		Attachment: &Attachment{
 			Type: "image",
-			Payload: ImagePayload{
+			Payload: FilePayload{
+				URL: url,
+			},
+		},
+	}
+}
+
+// Creates a Message with audio attachment to be
+// sent by bot
+func NewAudioFromURL(url string) Message {
+	return Message{
+		Attachment: &Attachment{
+			Type: "audio",
+			Payload: FilePayload{
+				URL: url,
+			},
+		},
+	}
+}
+
+// Creates a Message with video attachment to be
+// sent by bot
+func NewVideoFromURL(url string) Message {
+	return Message{
+		Attachment: &Attachment{
+			Type: "video",
+			Payload: FilePayload{
+				URL: url,
+			},
+		},
+	}
+}
+
+// Creates a Message with file attachment to be
+// sent by bot
+func NewFileFromURL(url string) Message {
+	return Message{
+		Attachment: &Attachment{
+			Type: "file",
+			Payload: FilePayload{
 				URL: url,
 			},
 		},
@@ -71,6 +126,15 @@ func NewPostbackButton(title, postback string) Button {
 		Type:    "postback",
 		Title:   title,
 		Payload: postback,
+	}
+}
+
+// Creates a new Button of type `phone_number`
+func NewPhoneButton(title, pn string) Button {
+	return Button{
+		Type:    "phone_number",
+		Title:   title,
+		Payload: pn,
 	}
 }
 
