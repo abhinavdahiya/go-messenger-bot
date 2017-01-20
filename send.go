@@ -34,7 +34,7 @@ type Action string
 type Message struct {
 	Text       string      `json:"text,omitempty"`
 	Attachment *Attachment `json:"attachment,omitempty"`
-	QuickReply []QR        `json:"quick_reply,omitempty"`
+	QuickReply []QR        `json:"quick_replies,omitempty"`
 }
 
 func (m *Message) AddQR(q ...QR) {
