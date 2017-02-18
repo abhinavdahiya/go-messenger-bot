@@ -107,6 +107,18 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 			},
 		}
 
+	case ListTemplate:
+		r = Request{
+			Recipient: u,
+			NotifType: n,
+			Message: Message{
+				Attachment: &Attachment{
+					Type:    "template",
+					Payload: c.(ListTemplate),
+				},
+			},
+		}
+
 	case ButtonTemplate:
 		r = Request{
 			Recipient: u,

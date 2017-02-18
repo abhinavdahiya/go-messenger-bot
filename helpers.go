@@ -103,6 +103,19 @@ func NewGenericTemplate() GenericTemplate {
 	}
 }
 
+// Creates an empty list template
+func NewListTemplate() ListTemplate {
+	return ListTemplate{
+		GenericTemplate: GenericTemplate{
+			TemplateBase: TemplateBase{
+				Type: "list",
+			},
+			Elements: []Element{},
+		},
+		TopElementStyle: "large",
+	}
+}
+
 // Creates a new Element (info card) to be sent as
 // part of the generic template
 func NewElement(title string) Element {
