@@ -93,6 +93,11 @@ func (g *GenericTemplate) AddElement(e ...Element) {
 	g.Elements = append(g.Elements, e...)
 }
 
+type ListTemplate struct {
+	GenericTemplate
+	TopElementStyle string `json:"top_element_style"` // compact or large(default)
+}
+
 type Element struct {
 	Title    string   `json:"title"`
 	URL      string   `json:"item_url,omitempty"`
