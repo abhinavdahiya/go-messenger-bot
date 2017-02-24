@@ -10,7 +10,7 @@ type Response struct {
 
 // This defines an Entry in the payload by webhook
 type Entry struct {
-	PageID    int64      `json:"id"`
+	PageID    string     `json:"id"`
 	Time      int64      `json:"time"`
 	Messaging []Callback `json:"messaging"`
 }
