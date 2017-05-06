@@ -35,7 +35,7 @@ type Callback struct {
 }
 
 func (c Callback) IsMessage() bool {
-	return !(c.Message.Text == "" && len(c.Message.Attachments) == 0)
+	return (c.Message.Text != "" || len(c.Message.Attachments) != 0) && !c.Message.IsEcho
 }
 
 func (c Callback) IsOptin() bool {
@@ -70,6 +70,7 @@ type InputOptin struct {
 // If text message only Text field exists
 // If media message Attachments fields contains an array of attachmensts sent
 type InputMessage struct {
+	IsEcho      bool              `json:"is_echo,omitempty"`
 	MID         string            `json:"mid"`
 	Seq         int64             `json:"seq"`
 	Text        string            `json:"text"`
