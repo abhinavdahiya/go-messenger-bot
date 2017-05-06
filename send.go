@@ -19,7 +19,8 @@ var (
 )
 
 const (
-	APIEndpoint = "https://graph.facebook.com/v2.6/me/messages?access_token=%s"
+	APIEndpoint  = "https://graph.facebook.com/v2.8/me/messages?access_token=%s"
+	UserEndpoint = "https://graph.facebook.com/v2.8/%d?access_token=%s"
 )
 
 type Request struct {

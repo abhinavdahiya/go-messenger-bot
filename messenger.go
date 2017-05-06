@@ -38,6 +38,40 @@ func NewBotAPI(token string, vtoken string, secret string) *BotAPI {
 	}
 }
 
+type FullUser struct {
+	User       User
+	FirstName  string `json:"first_name,omitempty"`
+	LastName   string `json:"last_name,omitempty"`
+	ProfilePic string `json:"profile_pic,omitempty"`
+	Locale     string `json:"locale,omitempty"`
+	Timezone   int64  `json:"timezone,omitempty"`
+	Gender     string `json:"gender,omitempty"`
+}
+
+func (bot *BotAPI) GetFullUser(user User) (FullUser, error) {
+	uri := fmt.Sprintf(UserEndpoint, user.ID, bot.Token)
+
+	req, _ := http.NewRequest("GET", uri, nil)
+
+	resp, err := bot.Client.Do(req)
+	if err != nil {
+		return FullUser{}, err
+	}
+	defer resp.Body.Close()
+
+	var fullUser FullUser
+	dec := json.NewDecoder(resp.Body)
+	err = dec.Decode(&fullUser)
+	if err != nil {
+		return FullUser{}, nil
+	}
+
+	if resp.StatusCode != 200 {
+		return fullUser, errors.New(http.StatusText(resp.StatusCode))
+	}
+	return fullUser, nil
+}
+
 // This helps send request (send messages to users)
 // It takes Request struct encoded into a buffer of json bytes
 // The APIResponse contains the error from FB if any
