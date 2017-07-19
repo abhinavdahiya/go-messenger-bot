@@ -15,6 +15,7 @@ import (
 	"os"
 	"path/filepath"
 	"net/textproto"
+	"mime"
 )
 
 // This defines a bot
@@ -192,18 +193,30 @@ func (bot *BotAPI) SendFile(u User, path string) (APIResponse, error) {
 	}
 	defer file.Close()
 
+	ftypes, err := mime.ExtensionsByType(path)
+	if err != nil {
+		return APIResponse{}, err
+	}
+	if len(ftypes) == 0 {
+		return APIResponse{}, err
+	}
+
+	return bot.SendStream(u, filepath.Base(path), ftypes[0], file)
+}
+
+func (bot *BotAPI) SendStream(u User, filename, contentType string, r io.Reader) (APIResponse, error) {
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
 	//part, err := writer.CreateFormFile("filedata", filepath.Base(path))
 	hdr := textproto.MIMEHeader{
-		"Content-Disposition": []string{"name=\"filedata\"; filename=\""+filepath.Base(path)+"\"", },
-		"Content-Type": []string{ "image/png", },
+		"Content-Disposition": []string{"name=\"filedata\"; filename=\""+filename+"\"", },
+		"Content-Type": []string{ contentType, },
 	}
 	part, err := writer.CreatePart(hdr)
 	if err != nil {
 		return APIResponse{}, err
 	}
-	_, err = io.Copy (part, file)
+	_, err = io.Copy (part, r)
 
 	usr, _ := json.Marshal(u)
 	_ = writer.WriteField("recipient", string(usr))
@@ -211,13 +224,13 @@ func (bot *BotAPI) SendFile(u User, path string) (APIResponse, error) {
 	im, _ := json.Marshal(img)
 	_ = writer.WriteField("message", string(im))
 
-	contentType := writer.FormDataContentType()
+	contentType2 := writer.FormDataContentType()
 
 	if err := writer.Close(); err != nil {
 		return APIResponse{}, err
 	}
 
-	return bot.MakeRequestMultipart(contentType, body)
+	return bot.MakeRequestMultipart(contentType2, body)
 }
 
 //This function verifies the message
