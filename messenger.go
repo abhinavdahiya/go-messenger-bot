@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"net/textproto"
 )
 
 // This defines a bot
@@ -42,11 +43,36 @@ func NewBotAPI(token string, vtoken string, secret string) *BotAPI {
 // It takes Request struct encoded into a buffer of json bytes
 // The APIResponse contains the error from FB if any
 // Should NOT be directly used, Use Send / SendFile
-func (bot *BotAPI) MakeRequest(b *bytes.Buffer) (APIResponse, error) {
+func (bot *BotAPI)  MakeRequest(b *bytes.Buffer) (APIResponse, error) {
 	uri := fmt.Sprintf(APIEndpoint, bot.Token)
 
 	req, _ := http.NewRequest("POST", uri, b)
 	req.Header.Set("Content-Type", "application/json")
+	resp, err := bot.Client.Do(req)
+	if err != nil {
+		return APIResponse{}, err
+	}
+	defer resp.Body.Close()
+
+	var rsp APIResponse
+	dec := json.NewDecoder(resp.Body)
+	err = dec.Decode(&rsp)
+	if err != nil {
+		return APIResponse{}, nil
+	}
+
+	if resp.StatusCode != 200 {
+		return rsp, errors.New(http.StatusText(resp.StatusCode))
+	}
+	return rsp, nil
+}
+
+func (bot *BotAPI) MakeRequestMultipart(contentType string, body io.Reader) (APIResponse, error) {
+	//uri := "http://localhost:1234/asdf"
+	uri := fmt.Sprintf(APIEndpoint, bot.Token)
+
+	req, _ := http.NewRequest("POST", uri, body)
+	req.Header.Set("Content-Type", contentType)
 	resp, err := bot.Client.Do(req)
 	if err != nil {
 		return APIResponse{}, err
@@ -168,11 +194,16 @@ func (bot *BotAPI) SendFile(u User, path string) (APIResponse, error) {
 
 	body := &bytes.Buffer{}
 	writer := multipart.NewWriter(body)
-	part, err := writer.CreateFormFile("filedata", filepath.Base(path))
+	//part, err := writer.CreateFormFile("filedata", filepath.Base(path))
+	hdr := textproto.MIMEHeader{
+		"Content-Disposition": []string{"name=\"filedata\"; filename=\""+filepath.Base(path)+"\"", },
+		"Content-Type": []string{ "image/png", },
+	}
+	part, err := writer.CreatePart(hdr)
 	if err != nil {
 		return APIResponse{}, err
 	}
-	_, err = io.Copy(part, file)
+	_, err = io.Copy (part, file)
 
 	usr, _ := json.Marshal(u)
 	_ = writer.WriteField("recipient", string(usr))
@@ -180,12 +211,13 @@ func (bot *BotAPI) SendFile(u User, path string) (APIResponse, error) {
 	im, _ := json.Marshal(img)
 	_ = writer.WriteField("message", string(im))
 
-	err = writer.Close()
-	if err != nil {
+	contentType := writer.FormDataContentType()
+
+	if err := writer.Close(); err != nil {
 		return APIResponse{}, err
 	}
 
-	return bot.MakeRequest(body)
+	return bot.MakeRequestMultipart(contentType, body)
 }
 
 //This function verifies the message

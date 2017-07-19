@@ -56,7 +56,7 @@ type AttachmentPayload interface{}
 
 // Used as payload for type image/audio/video/file
 type FilePayload struct {
-	URL string `json:"url"`
+	URL string `json:"url,omitempty"`
 }
 
 type TemplateBase struct {
