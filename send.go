@@ -27,6 +27,7 @@ type Request struct {
 	Message   Message `json:"message,omitempty"`
 	Action    Action  `json:"sender_action,omitempty"`
 	NotifType string  `json:"notification_type"`
+	MessagingType   string      `json:"messaging_type,omitempty"`
 }
 
 type Action string

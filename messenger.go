@@ -120,6 +120,7 @@ func (bot *BotAPI) Send(u User, c interface{}, notif string) (APIResponse, error
 			Recipient: u,
 			Message:   c.(Message),
 			NotifType: n,
+			MessagingType: "RESPONSE",
 		}
 
 	case GenericTemplate:

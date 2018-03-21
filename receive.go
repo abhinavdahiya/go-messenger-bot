@@ -10,7 +10,7 @@ type Response struct {
 
 // This defines an Entry in the payload by webhook
 type Entry struct {
-	PageID    int64      `json:"id"`
+	PageID    string      `json:"id"`
 	Time      int64      `json:"time"`
 	Messaging []Callback `json:"messaging"`
 }
@@ -53,12 +53,12 @@ func (c Callback) IsDelivery() bool {
 // This defines an user
 // One of the fields will be set to identify the user
 type User struct {
-	ID          int64  `json:"id,omitempty,string"`
+	ID          string  `json:"id,omitempty"`
 	PhoneNumber string `json:"phone_number,omitempty"`
 }
 
 type Page struct {
-	ID int64 `json:"id,string"`
+	ID string `json:"id"`
 }
 
 // Ref contains the `data-ref` set for message optin for the bot
