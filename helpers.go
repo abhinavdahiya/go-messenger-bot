@@ -164,12 +164,14 @@ func NewButtonTemplate(text string) ButtonTemplate {
 
 // Creates an empty Receipt Template
 func NewReceiptTemplate(rname string) ReceiptTemplate {
+  uuid4, err := uuid.NewV4()
+  if err != nil {}
 	return ReceiptTemplate{
 		TemplateBase: TemplateBase{
 			Type: "receipt",
 		},
 		RecipientName: rname,
-		ID:            uuid.NewV4().String(),
+		ID:            uuid4.String(),
 		Currency:      "USD",
 		PaymentMethod: "",
 		Items:         []OrderItem{},
