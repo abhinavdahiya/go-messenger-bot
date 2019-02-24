@@ -165,7 +165,6 @@ func NewButtonTemplate(text string) ButtonTemplate {
 // Creates an empty Receipt Template
 func NewReceiptTemplate(rname string) ReceiptTemplate {
   uuid4 := uuid.NewV4()
-  if err != nil {}
 	return ReceiptTemplate{
 		TemplateBase: TemplateBase{
 			Type: "receipt",
