@@ -27,6 +27,7 @@ type Request struct {
 	Message   Message `json:"message,omitempty"`
 	Action    Action  `json:"sender_action,omitempty"`
 	NotifType string  `json:"notification_type"`
+	MessagingType   string      `json:"messaging_type,omitempty"`
 }
 
 type Action string
@@ -56,7 +57,7 @@ type AttachmentPayload interface{}
 
 // Used as payload for type image/audio/video/file
 type FilePayload struct {
-	URL string `json:"url"`
+	URL string `json:"url,omitempty"`
 }
 
 type TemplateBase struct {

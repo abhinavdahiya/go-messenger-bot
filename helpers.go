@@ -3,7 +3,7 @@ package mbotapi
 import "github.com/satori/go.uuid"
 
 // Creates a User from ID(int64)
-func NewUserFromID(id int64) User {
+func NewUserFromID(id string) User {
 	return User{
 		ID: id,
 	}
@@ -164,12 +164,13 @@ func NewButtonTemplate(text string) ButtonTemplate {
 
 // Creates an empty Receipt Template
 func NewReceiptTemplate(rname string) ReceiptTemplate {
+  uuid4 := uuid.NewV4()
 	return ReceiptTemplate{
 		TemplateBase: TemplateBase{
 			Type: "receipt",
 		},
 		RecipientName: rname,
-		ID:            uuid.NewV4().String(),
+		ID:            uuid4.String(),
 		Currency:      "USD",
 		PaymentMethod: "",
 		Items:         []OrderItem{},
